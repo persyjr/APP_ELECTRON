@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- JQUERY -->     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- BOOTSTRAP  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <!-- FONT AWESOME -->
+    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha384-ujbKXb9V3HdK7jcWL6kHL1c+2Lj4MR4Gkjl7UtwpSHg/ClpViddK9TI7yU53frPN" crossorigin="anonymous"></script>
+    <!-- html2canvas for jspdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- jspdf-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <!-- html2pdf -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+      integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+
+  <body  style="min-width: 800px;">
+    <style>
+    
+        *{
+            font-family: Arial, Helvetica;
+        }
+        td.w-25{
+            height: 19.8px;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            direction: ltr;
+        }
+        
+        .mosaico{
+            max-width: 230px;
+            max-height: 220px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto;
+        }
+        .imagen_mosaico{
+            height: 400px;
+        }
+        td{
+            background: #f2f0f5cd;
+        }
+        body{
+                background: #1F1F38;
+        }    
+    
+        a>img:hover, canvas:hover{
+        transform: translateY(-10px);
+        box-shadow: 0 40px 70px rgba(65, 4, 247, 0.5);
+        /*box-shadow: 0 40px 70px rgba(8, 247, 4, 0.5);*/
+        transition: 0.9s;
+        cursor: pointer;
+        }
+    </style>
+    
+    <!--<div  id="pspdfkit-header">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <form  action="" method="POST" enctype="multipart/form-data" >
+    <div id="invoice" class="bg-white" style="page-break-after: always">
+        <div class="container" style="max-width: 816px; height: 1185px;" >
+           
+            <div class="row px-5" >
+                <div class="table w-100 m-0" style="border-style: double;">
+                    <table class=" w-100 ">
+                        <tr style="border-style: double;">
+                            <div spancolspan="4" style=" background-color: #FF6D6D;">
+                                <p style="font-family: Arial, Helvetica; font-size: 16px; font-weight: bold;" class="d-flex justify-content-center m-0 font-weight-bold" >CERTIFICADO DE PRUEBA DE CARGA GATO No.<span class="pl-1 font-weight-bold"></span></p>   
+                                <p style="font-family: Times New Roman, Times, serif; font-size: 10px; font-weight: bold;" class="d-flex justify-content-center m-0"> TEST CERTIFICATE No. <span class="pl-1 font-weight-bold"></span></p>
+                            </div>
+                        </tr>
+                        
+                        <tr class="d-flex justify-content-between">
+                            <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0;">
+                                <p class="pl-1 font-weight-bold m-0" >FECHA</p>
+                                <p class="pl-1 m-0" >DATE</p>
+                            </td>
+                            <td class="d-flex pl-1 text-uppercase align-items-center" style="font-size: 14px; width: 30%;  margin: 0; border-style: none double none double;">                        
+                                    <p id="inicio_vigencia" class="d-inline font-weight-bold" style="   margin: 0; padding: 0;">
+                                    </p>                        
+                            </td>
+                            <td style="background-color: #FBE4D5; font-size: 12px; width: 20%;   margin: 0; padding: 0;">
+                                <p class="d-inline font-weight-bold" style="  margin: 0; padding: 0;">VIGENCIA PRUEBA DE CARGA </p>
+                                <p class="d-inline" style="  margin: 0; padding: 0;" >/ DUE DATE LOAD TEST</p>
+                            </td>
+                            <td class="d-flex pl-1 text-uppercase align-items-center" style="font-size: 12px; width: 30%;  margin: 0; border-style: none none none double;">
+                               
+                                    <a class="d-flex align-items-center font-weight-bold"  style="font-size: 14px;  margin: 0; padding: 0;" id="update_campo_vigencia"
+                                    data-toggle="modal" data-target="#js-modal-3"
+                                    data-url=""
+                                    data-width="modal-md"
+                                    data-title="Editar vigencia" data-action="Editar"
+                                    >
+                                        
+                                    </a>
+                                
+                                <a class="d-flex align-items-center" style="  margin: 0; padding: 0;" 
+                                    data-toggle="modal" data-target="#js-modal-3"
+                                    data-url=""
+                                    data-width="modal-md"
+                                    data-title="Editar vigencia" data-action="Editar"
+                                    >
+                                    <p class="d-flex align-items-center font-weight-bold"  style="font-size: 14px;  margin: 0; padding: 0;" id="campo_vigencia_existente">
+                                        
+                                    </p>
+                                </a>
+                                
+                            </td>
+                        </tr>
+                        <tr class="d-flex justify-content-start">
+                            <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0; ">
+                                <p class="pl-1 font-weight-bold" style="margin: 0;">CONTACTO </p>
+                                <p class="pl-1"  style="  margin: 0;">CONTACT</p>
+                            </td>
+                            <td style="width: 30%; font-size: 14px; margin: 0; padding: 0; border-style: none double none double;">
+                                <p class="pl-1 text-uppercase" style="margin: 0; padding: 0;">
+                                    
+                                </p>
+                            </td>
+                            <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0;">
+                                <p class="pl-1 m-0 font-weight-bold">ORDEN.TRABAJO. </p>
+                                <p class="pl-1 m-0" >WORK. ORDER.</p>
+                            </td>
+                            <td class="d-flex align-items-center" style="width: 30%; font-size: 14px;  margin: 0; padding: 0;border-style: none none none double;">
+                                <p  class="pl-1 m-0">
+                                    
+                                </p>
+                            </td>                        
+                        </tr>
+                        <tr class="d-flex justify-content-between">                    
+                        <td  style="width: 20%; background-color: #FBE4D5; font-size: 14px; margin: 0; padding: 0;">
+                            <p class="pl-1 font-weight-bold" style="margin: 0;">TELEFONO </p>
+                            <p  class="pl-1 m-0">PHONE</p>
+                        </td>
+                        <td class="d-flex align-items-center" style="width: 30%; font-size: 14px; margin: 0; padding: 0; border-style: none double none double;">
+                            <p  class="pl-1 m-0">
+                               
+                            </p>
+                        </td>
+                        <td style="width: 20%; background-color: #FBE4D5; font-size: 14px; margin: 0; padding: 0;">
+                            <p class="pl-1 font-weight-bold" style="margin: 0;">FLOTA </p>
+                            <p class="pl-1"  style="  margin: 0;">NAVY</p>
+                        </td>
+                        <td class="d-flex align-items-center" style="width: 30%; font-size: 14px;margin: 0; padding: 0; border-style: none none none double;">
+                            <p  class="pl-1 m-0">
+                                
+                            </p>
+                        </td>
+                        </tr>
+                        <tr class="d-flex justify-content-between">
+                        <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0;">
+                            <p class="pl-1 font-weight-bold" style="margin: 0;">PROPIETARIO </p>
+                            <p  class="pl-1 m-0">PROPERTY</p>
+                        </td>
+                        <td class="d-flex justify-content-start align-items-center" style="border-style: none double none double; width: 30%; font-size: 14px; margin: 0; padding: 0; font-family: Times New Roman, Times, serif;">
+                            <p class="pl-1 m-0" >
+                               
+                            </p>
+                        </td>
+                        <td  style="width: 20%; background-color: #FBE4D5; font-size: 14px; margin: 0; padding: 0;">
+                            <p class="pl-1 font-weight-bold" style="margin: 0;">NOMBRE </p>
+                            <p  class="pl-1 m-0">NAME</p>
+                        </td>
+                        <td  class="d-flex justify-content-start align-items-center" style="width: 30%;font-size: 14px; margin: 0; padding: 0;border-style: none none none double;">
+                            <p class="pl-1 m-0" >
+                               
+                            </p>
+                        </td>
+                        </tr>
+                        <tr class="d-flex justify-content-between">
+                        <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0;">
+                            <p class="pl-1 m-0 font-weight-bold">CORREO </p>
+                            <p class="pl-1 m-0" >EMAIL</p>
+                        </td>
+                        <td class="d-flex align-items-center"  style="width: 30%; font-size: 14px; margin: 0; padding: 0;border-style: none double none double;">
+                            <p  class="pl-1 m-0">
+                               
+                            </p>
+                        </td>
+                        <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0;">
+                            <p class="pl-1 m-0 font-weight-bold">PARTE NÚMERO </p>
+                            <p class="pl-1 m-0" >PART NUMBER</p>
+                        </td>
+                        <td class="d-flex align-items-center" style="width: 30%; font-size: 14px; margin: 0; padding: 0;border-style: none none none double;">
+                            <p  class="pl-1 m-0">
+                                
+                            </p>
+                        </td>
+                        </tr>
+                        <tr class="d-flex justify-content-between">
+                        <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0; ">
+                            <p class="pl-1 m-0 font-weight-bold">DIRECCIÓN </p>
+                            <p class="pl-1 m-0" >ADRESS</p>
+                        </td>
+                        <td class="d-flex align-items-center"  style="width: 30%;font-size: 12px; margin: 0; padding: 0; border-style: none double none double;">
+                            <p  class="pl-1 m-0 text-uppercase">
+                               
+                            </p>
+                        </td>
+                        <td  style="background-color: #FBE4D5; font-size: 14px; width: 20%;  margin: 0; padding: 0;">
+                            <p class="pl-1 m-0 font-weight-bold">SERIE NÚMERO </p>
+                            <p class="pl-1 m-0" >SERIAL NUMBER</p>
+                        </td>
+                        <td class="d-flex align-items-center" style="width: 30%; font-size: 14px;margin: 0; padding: 0; border-style: none none none double;">
+                            <p  class="pl-1 m-0">
+                              
+                            </p>
+                        </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+    
+            <div class="row px-5 pt-0">
+                <div class="table w-100 p-0">
+                    <table class=" w-100" style="border-style: double double double double;">
+                        
+                        <tr class="d-flex justify-content-between" style="border-style: none none double none;">
+                            <td class="w-100 d-flex justify-content-center" style="background-color: #FBE4D5; font-size: 16px;   margin: 0; padding: 0.125rem;">
+                                <p class="d-inline font-weight-bold" style="font-size: 16px;   margin: 0; padding: 0;">PROCEDIMIENTO </p>
+                                <p class="d-inline" style="font-size: 16px;   margin: 0; padding: 0;">/  PROCEDURE</p>
+                            </td>
+                        </tr>
+                        <tr class="d-flex justify-content-center">
+                            <td class="w-100 " style="font-size: 14px; padding: 0;">
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                    </div>
+                                </div>
+                            </td>                       
+                        </tr>                    
+                    </table>
+                </div>
+            </div>
+    
+            
+        </div>
+        <div class="container" style="max-width: 816px; height: 1185px;" >
+            
+            <div class="row px-5" >
+                <div class="table w-100" style="padding-top: 0px; padding-bottom: 100px;">
+                    <table class=" w-100" style="border-style: double double double double;">
+                        <tr class="d-flex justify-content-between">
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none none double none; background-color: #FBE4D5; font-size: 16px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">REGISTRO</span> <span>FOTOGRÁFICO</span></p>
+                                <p class="w-50" style="word-spacing: 0.5em; margin: 0; padding: 0 0 0 5px;"><span class="pr-1">/ PHOTOGRAPHIC</span> <span class="pl-1"> RECORD.</span></p>
+                            </td>
+                        </tr>
+                        <tr class="d-flex justify-content-between">
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none double double none; background-color: #FBE4D5; font-size: 12px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">0 minuto</span></p>
+                               
+                            </td>
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none double double none; background-color: #FBE4D5; font-size: 12px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">2 munitos</span></p>
+                                
+                            </td>
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none none double none; background-color: #FBE4D5; font-size: 12px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">4 minutos</span></p>
+                                
+                            </td>
+                        </tr>
+                        
+                        <tr class="d-flex justify-content-center ">
+                            <td class=" w-50 d-flex justify-content-center align-items-center" style="border-style: none double double none; font-size: 0.625rem; padding: 0.2rem; height: 400px;">
+                                
+                            </td>
+                            <td class="w-50 d-flex justify-content-center align-items-center" style="border-style: none double double none; font-size: 0.625rem; padding: 0.2rem;">
+                                
+                            </td>
+                            <td class="w-50 d-flex justify-content-center align-items-center" style="font-size: 0.625rem; padding: 0.2rem; border-style: none double double none; ">
+                               
+                            </td>
+                        </tr>
+                        <tr class="d-flex justify-content-between">
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none double double none; background-color: #FBE4D5; font-size: 12px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">6 minutos</span></p>
+                               
+                            </td>
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none double double none; background-color: #FBE4D5; font-size: 12px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">8 munitos</span></p>
+                                
+                            </td>
+                            <td class="w-100 d-flex justify-content-center" style="border-style: none none double none; background-color: #FBE4D5; font-size: 12px;   margin: 0; padding: 0.125rem;">
+                                <p class="w-50 d-flex justify-content-end font-weight-bold" style="word-spacing: 0.5em; margin: 0; padding:0 ;"><span class="pr-1">10 minutos</span></p>
+                                
+                            </td>
+                        </tr>
+                        
+                        <tr class="d-flex justify-content-center " style="height: 400px;">
+                            <td class=" w-50 d-flex justify-content-center align-items-center" style="border-style: none double double none; font-size: 0.625rem; padding: 0.2rem; ">
+                                
+                            </td>
+                            <td class="w-50 d-flex justify-content-center align-items-center" style="border-style: none double double none; font-size: 0.625rem; padding: 0.2rem;">
+                                
+                            </td>
+                            <td class="w-50 d-flex justify-content-center align-items-center" style="font-size: 0.625rem; padding: 0.2rem; border-style: none double double none; ">
+                                
+                                <a  class="d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#js-modal-3"
+                                    data-url="" 
+                                    data-width="modal-md"
+                                    data-title="Editar imagen" data-action="Editar">
+                                    <div class="mosaico">
+                                        <img class="imagen_mosaico"    src="" alt="">
+                                    </div>
+                                </a>
+                               
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+        <div class="container" style="max-width: 816px; height: 1185px;" >
+            
+            <div class="row px-5 pt-2">
+                <div class="table w-100">
+                    <table class=" w-100">
+                        <tr class="d-flex justify-content-between" style="border-style: double;">
+                            <td class="w-100 d-flex justify-content-center" style="background-color: #FBE4D5; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                <p class="d-inline font-weight-bold" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">RESULTADOS</p>
+                                <p class="d-inline" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">/ RESULTS</p>
+                            </td>
+                        </tr>
+                        <tr class="d-flex justify-content-center" style="border-style: double;">
+                            <td class="w-100 border border-black d-flex justify-content-center align-items-center" style="font-size: 0.625rem; padding: 0.2rem;">
+                                <a class="p-0 m-0"  class="d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#js-modal-3"
+                                    data-url="" 
+                                    data-width="modal-md"
+                                    data-title="Editar Valores" data-action="Editar">
+                                <canvas id="myChart" style="min-width:700px;background-color: white;" ></canvas>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row px-5 pt-2 ">
+                <div class="table w-100 py-5">
+                    
+                        <table class=" w-100">
+                            <tr class="d-flex justify-content-between" style="border-style: double;">
+                                <td class="w-100 d-flex justify-content-center" style="background-color: #FBE4D5; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    <p class="d-inline font-weight-bold" style="word-spacing: 0.5em; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">EQUIPO UTILIZADO Y DOCUMENTOS DE REFERENCIA</p>
+                                    <p class="d-inline" style="word-spacing: 0.5em; font-size: 0.625rem;   margin: 0; padding: 0.125rem;"><span class="pr-1">/ REFERENCE</span> <span class="pl-1">DOCUMENTS</span></p>
+                                </td>
+                            </tr>
+                            
+                            <tr class="d-flex justify-content-center " style="border-style: none double double double;">
+                                
+                                <td class="border border-black " style="background-color: #EDEDED; width: 16%; font-size: 0.625rem; padding: 0.2rem;">
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">NOMBRE </p>
+                                    <p class="d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  NAME</p> 
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 16%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    <a class="p-0 m-0"  class="d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#js-modal-3"
+                                    data-url="" 
+                                    data-width="modal-md"
+                                    data-title="Editar Valores" data-action="Editar">
+                                    <p class="d-inline" style="word-spacing: 0.5rem; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">{{ object.celda.nombre }}</p>
+                                    </a>
+                                </td>
+                                <td class="border border-black " style="background-color: #EDEDED; width: 17%; font-size: 0.625rem; padding: 0.2rem;">
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.525rem;   margin: 0; padding: 0.125rem;"> FECHA VENCIMIENTO</p>
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.525rem;   margin: 0; padding: 0.125rem;">  EQUIPO</p>
+                                    <p class="d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  DUE DATE</p> 
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 17%; font-size: 0.625rem; padding: 0.2rem;">
+                                    
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="background-color: #EDEDED; width: 17%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    <p class="font-weight-bold" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">EQUIPO UTILIZADO</p>
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 17%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    
+                                </td>
+                            </tr>
+                            <tr class="d-flex justify-content-center " style="border-style: none double double double;">
+                                <td class="border border-black " style="background-color: #EDEDED; width: 16%; font-size: 0.625rem; padding-top: 15px;">
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">FABRICANTE </p>
+                                    <p class="d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  MANUFACTURER</p> 
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 16%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    <p class="d-inline" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                        
+                                    </p>
+                                </td>
+                                <td class="border border-black" style="background-color: #EDEDED; width: 17%; font-size: 0.625rem; padding: 0.2rem;">
+                                    <p class="font-weight-bold d-flex justify-content-center " style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">PROCEDIMIENTO  </p>
+                                    <p class="font-weight-bold d-flex justify-content-center " style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;"> ESPECÍFICO </p>
+                                    <p class="d-flex justify-content-center" style="word-spacing: 0.5rem; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  SPECIFIC </p> 
+                                    <p class="d-flex justify-content-center" style="word-spacing: 0.5rem; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">   PROCEDURE</p> 
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 17%; font-size: 0.625rem; padding: 0.2rem;">
+                                    <p class="p-0 m-0 text-center">
+                                        Procedimineto interno paso a paso prueba de carga
+                                    </p>
+                                </td>
+                                <td class="border border-black " style="background-color: #EDEDED; width: 17%; font-size: 0.625rem;   margin: 0; padding-top: 15px;">
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">MÁQUINA </p>
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;"> ESTACIONARIA</p>
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 17%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    
+                                </td>
+                            </tr>
+                            <tr class="d-flex justify-content-center " style="border-style: none double double double;">
+                                <td class="border border-black " style="background-color: #EDEDED; width: 16%; font-size: 0.625rem; padding: 0.2rem;">
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">SERIE NÚMERO</p>
+                                    <p class="d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  SERIAL NUMBER</p> 
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 16%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    <p class="d-inline" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                        
+                                    </p>
+                                </td>
+                                <td class="border border-black " style="background-color: #EDEDED; width: 17%; font-size: 0.625rem; padding: 0.2rem;">
+                                    <p class="font-weight-bold d-flex justify-content-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">CALIBRADO POR</p>
+                                    <p class="d-flex justify-content-center" style="word-spacing: 0.5rem; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  CALIBRATED BY</p> 
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 17%; font-size: 0.625rem; padding: 0.2rem;">
+                                    
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="background-color: #EDEDED; width: 17%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    <p class="font-weight-bold" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">MÁQUINA PORTATIL</p>
+                                </td>
+                                <td class="border border-black d-flex justify-content-center align-items-center" style="width: 17%; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                    
+                                </td>
+                            </tr>                    
+                        </table>
+                    
+                </div>
+            </div>
+            <div class="row px-5 pt-2">
+                <div class="table w-100">
+                    <table class=" w-100">
+                        <tr class="d-flex justify-content-between" style="border-style: double;">
+                            <td class="w-100 d-flex justify-content-center" style="background-color: #FBE4D5; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                <p class="d-inline font-weight-bold" style="word-spacing: 0.5em; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">EQUIPO UTILIZADO Y DOCUMENTOS DE REFERENCIA</p>
+                                <p class="d-inline" style="word-spacing: 0.5em; font-size: 0.625rem;   margin: 0; padding: 0.125rem;"><span class="pr-1">/ REFERENCE</span> <span class="pl-1">EQUIPMENT</span></p>
+                            </td>
+                        </tr>
+                        
+                        <tr class="d-flex justify-content-center " style="border-style: none double double double;">
+                            <td class="border border-black " style="background-color: #EDEDED; width: 33%; font-size: 0.625rem; padding: 0.2rem;">
+                                <p class="font-weight-bold w-100 d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">CARGA APLICADA (TONs) </p>
+                                <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  APPLIED WEIGHT</p> 
+                            </td>
+                            <td class="border border-black " style="background-color: #EDEDED; width: 33%; font-size: 0.625rem; padding: 0.2rem;">
+                                <p class="font-weight-bold w-100 d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">TIEMPO DEL ENSAYO (min) </p>
+                                <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  TIME</p> 
+                            </td>
+                            <td class="border border-black " style="background-color: #EDEDED; width: 34%; font-size: 0.625rem; padding: 0.2rem;">
+                                <p class="font-weight-bold w-100 d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">TEMPERATURA DE ENSAYO (°c) </p>
+                                <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">  TEMPERATURE</p> 
+                            </td>                        
+                        </tr>                   
+                        <tr class="d-flex justify-content-center " style="border-style: none double double double;">
+                            <td class="border border-black " style="width: 33%; font-size: 0.625rem; padding: 0.2rem;">
+                                <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">{{ object.valor_1 }}</p> 
+                            </td>
+                            <td class="border border-black " style="width: 33%; font-size: 0.625rem; padding: 0.2rem;">
+                                <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">10 min</p> 
+                            </td>
+                            <td class="border border-black " style="width: 34%; font-size: 0.625rem; padding: 0.2rem;">
+                                <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">17 °C</p>
+                            </td>                        
+                        </tr>                   
+                                           
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+                    
+        <div class="container" style="max-width: 816px; height: 1135px;" >
+            
+            <div class="row px-5" >
+                <table  class="w-100">
+                    <tr class="d-flex justify-content-center " style="border-style: double;">
+                        <td class="border border-black " style="width: 33%; font-size: 0.625rem; padding: 0.2rem;">
+                            <p class="font-weight-bold w-100 d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">CONDICIÓN E INTERPRETACIÓN DE RESULTADOS</p>
+                            <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">CONDITION AND INTERPRETATION OF RESULTS</p> 
+                        </td>
+                        <td class="border border-black " style="width: 67%; font-size: 0.625rem; padding: 0.2rem;">
+                            <p class="d-flex justify-content-center align-items-center" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">{{ form.interpretacion_resultados|as_crispy_field }}</p> 
+                        </td>                                               
+                    </tr>
+                </table>
+                
+                <p class="w-100" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                    <span class="font-weight-bold">OAR INDUSTRIAL SAS, certifica que los trabajos ejecutados fueron realizados, siguiendo las recomendaciones del fabricante.</span>
+                </p>
+                <p class="w-100" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                    Certify thats Works executed were made following the recomendations of the component manufacturers.
+                </p>
+                <!-- Lógica para la asignacion de extension de prueba de carga para el cliente de copa identificado con ID 7 -->
+                <p class="w-100" style="font-size: 0.625rem;   margin: 0; min-height: 20px;">
+                    
+                </p>
+            </div>
+            <div class="row px-5 pt-0">
+                <div class="table w-100">
+                    <table class=" w-100">
+                        <tr class="d-flex justify-content-between" style="border-style: double;">
+                            <td class="w-100 d-flex justify-content-center" style="background-color: #FBE4D5; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">
+                                <p class="d-inline font-weight-bold" style="word-spacing: 0.5em; font-size: 0.625rem;   margin: 0; padding: 0.125rem;">RECOMENDACIONES PARA EQUIPO EN SERVICIO </p>
+                                <p class="d-inline" style="word-spacing: 0.5em; font-size: 0.625rem;   margin: 0; padding: 0.125rem;"><span class="pr-1">/ SERVICE</span> <span class="pl-1">RECOMMENDATIONS</span></p>
+                            </td>
+                        </tr>    
+                        <tr class="d-flex justify-content-center" style="border-style: none double double double;">
+                            <td>
+                            <ul>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                        <li></li>
+                                        <p class="px-2" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">En servicio el nivel de hidráulico presente en el reservorio debe permanecer en el apropiado nivel de hidráulico. El nivel de hidráulico se debe revisar con los cilindros contraídos.</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                        <li></li>
+                                        <p class="px-2" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">Lubricar los pines, el sistema de la bomba manual, cilindros y partes móviles del equipo.</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start">
+                                        <li></li>
+                                        <p class="px-2" style="font-size: 0.625rem;   margin: 0; padding: 0.125rem;">Si el equipo se ha dispuesto en un lugar de almacenamiento, se recomiendo ubicarlo sobre una superficie horizontal, en condiciones normales de temperatura y ambiente, con el aceite hidráulico recomendado por el fabricante</p>
+                                    </div>
+                                </div>
+                            </ul>                
+                            </td>
+                        </tr>              
+                    </table>
+                </div>
+            </div>
+            <div class="row" style="padding-top:0px ;">
+                <div class="col-6">
+                    <div class="w-100 border border-black p-0 d-flex justify-content-center align-items-center" style="height: 130px; width: 80%; font-size: 0.625rem; padding: 0rem;">
+                        
+                    </div>
+                    <div class=" py-1">
+                        
+                        <div class="font-weight-bold d-flex justify-content-center">NOMBRE DEL TÉCNICO </div> 
+                        <div class="d-flex justify-content-center" style="font-style: italic; font-size: 0.8rem;">NAME TECHNICAL</div> 
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border w-100 border-black p-0 d-flex justify-content-center align-items-center" style="height: 130px; width: 80%; font-size: 0.625rem; padding: 0rem;">
+                        
+                    </div>
+                    <div class="py-1">
+                        
+                        <div style="word-spacing: 0.5em; " class="font-weight-bold d-flex justify-content-center">NOMBRE DEL TÉCNICO </div>
+                        <div class="d-flex justify-content-center" style="font-style: italic; font-size: 0.8rem;">NAME QUALITY CONTROL</div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        
+    </div>
+    <div class="d-flex justify-content-center mt-5">
+        <div class=" d-flex justify-content-center" >
+            <a href="" class="btn btn-outline-primary text-primary" style="width: 150px;" id="">Regresar</a>   
+        </div>
+        
+        
+    </div>
+    </form>
+    <!-- 
+        <script type="module" src="{% static 'js/components/wm-image-field-docs.js' %}"></script>
+    -->
+    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"
+        integrity="sha384-TXx4nFk9yfqhYyuOr5TSNDLkwYpxvszQRKWzlWSQopwFpZsUPq/z1wQtH61CW6ex" 
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0-rc"></script>
+    <script>
+    //logica de canvas
+        const valor1=parseFloat('{{ object.valor_1 }}')
+        const valor2=parseFloat('{{ object.valor_2 }}')
+        const valor3=parseFloat('{{ object.valor_3 }}')
+        const valor4=parseFloat('{{ object.valor_4 }}')
+        const valor5=parseFloat('{{ object.valor_5 }}')
+        const valor6=parseFloat('{{ object.valor_6 }}')
+        const xValues = [NaN,0,2,4,6,8,10];
+    
+        const data = {
+        labels: xValues,
+        datasets: [{      
+              
+          label: 'Carga [TONs]',  // Asegura que haya una etiqueta en la leyenda
+          
+          data: [NaN, 102, 98, 97, 96, 93, 92],
+          datalabels: {
+              align: 'right',
+              color: '#blue',
+              size:24
+            },
+          
+          
+          fill: true,
+          /*
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+            ],
+            backgroundColor: "rgba(255, 255, 255, 0)",  // Transparente
+            */
+           pointStyle: 'circle',
+           pointRadius: 5,
+           pointHoverRadius: 25,
+          cubicInterpolationMode: 'monotone',
+          tension: 0.4
+        }],   
+      };
+      const config = {
+      type: 'line',
+      
+      options: {
+        
+        responsive: false,
+        plugins: {  
+            
+            datalabels: {
+                formatter: function(value) {
+                    return value+' Ton';
+                    // eq. return ['line1', 'line2', value]
+                    },
+                font: {
+                   // weight: 'bold',
+                    size: 16,
+                    },
+                anchor: 'end',
+                align: 'end',
+                labels: {
+                    value: {
+                        color: 'blue',
+                        }
+                    },
+            },
+                 
+          title: {
+            display: true,
+            padding: {
+              top: 30
+            },
+            text: 'COMPORTAMIENTO DEL EQUIPO EN EL ENSAYO',
+            font: {
+              size: 16,
+              family: 'tahoma',
+              weight: 'bold',
+              style: 'normal'
+            },
+          },
+          
+          subtitle: {
+            display: true,
+            text: 'Prueba de Carga',
+            color: 'blue',
+            align: 'start',
+            font: {
+              size: 12,
+              family: 'tahoma',
+              weight: 'normal',
+              style: 'italic'
+            },
+            padding: {
+              bottom: 10
+            }
+          }
+          
+        },
+        scales: {
+                x: {
+                    
+                    title: {
+                        display: true,
+                        text: 'TIEMPO (min)',
+                    },
+                    type: 'category',
+                    labels: ['','0', '2', '4', '6', '8', '10','12'],
+                    ticks: {
+                    stepSize: 0.1
+                }
+                    
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'CARGA (TONs)'
+                    },
+                    ticks: {
+                    stepSize: 0.1
+                }
+                }
+        },
+      },
+      data: data
+    };
+    Chart.register(ChartDataLabels);
+      Chart.defaults.set('plugins.datalabels', {
+        color: '#FE777B'
+      });
+    new Chart("myChart", config);
+    // logica de generacion de pdf
+        
+        const button = document.getElementById('previsualizar-button');
+        if ( button != null ){
+            button.addEventListener('click', generatePDF2);
+        }
+    
+        const now = new Date();
+        var fecha_vi = now
+        var str_vigencia = 0;
+        if ( document.querySelector('#campo_vigencia') != undefined ) {
+            fecha_vi.setFullYear(fecha_vi.getFullYear() + 1);
+            const meses = [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
+            let vigencia = document.querySelector('#campo_vigencia');
+            const dia = String(fecha_vi.getDate()).padStart(2, '0');
+            const mes = String(fecha_vi.getMonth() + 1).padStart(2, '0');
+            const año = fecha_vi.getFullYear();
+            const horas = String(fecha_vi.getHours()).padStart(2, '0');
+            const minutos = String(fecha_vi.getMinutes()).padStart(2, '0');
+            str_vigencia = `${dia} de ${meses[fecha_vi.getMonth()]} de ${año} a las ${horas}:${minutos}`;
+            document.querySelector('#campo_vigencia').innerText = str_vigencia;
+            fecha_vi = fecha_vi.toISOString()
+        }
+    
+        if ( document.querySelector('#campo_vigencia_existente') != undefined ) {
+            fecha_vi = null
+        }
+        
+        const aprbar_button = document.getElementById('aprobar-pdf-button');
+        if ( aprbar_button != null) {
+            aprbar_button.addEventListener('click', function (event) {
+                event.target.style = "pointer-events: none;";
+                savePDF_('carga_gato', "{% url 'documentos:save-pdf' %}", "{{csrf_token}}", "{{ object.id }}", fecha_vi)
+            });
+        }
+    // logica de actualizacion fecha de inicio de vigencia.
+    let fecha_vigencia = `{{ object.mantenimiento.herramienta.vigencia_prueba_carga|date:"Y, m, d" }}`
+    let frecuencia = `365`
+    let inicio_vigencia_tamplate = document.getElementById('inicio_vigencia')
+    frecuencia = parseFloat(frecuencia)
+    let segundos_frecuencia = frecuencia*24*60*60*1000
+    let fecha_vigencia_date = new Date(fecha_vigencia);
+    const nuevaFecha = new Date(fecha_vigencia_date.getTime() - segundos_frecuencia);
+    const opciones = {
+      weekday: 'short',    // Día de la semana corto (jue)
+      year: 'numeric',     // Año (2020)
+      month: 'short',      // Mes corto (mar)
+      day: 'numeric'       // Día numérico (5)
+    };
+    
+    // Formatear la fecha
+    const fechaFormateada = nuevaFecha.toLocaleDateString('es-ES', opciones);
+    if ( fecha_vigencia != null && fecha_vigencia != ''){
+        inicio_vigencia_tamplate.innerHTML = fechaFormateada
+    }
+    </script>
+  </body>
+</html>
