@@ -15,7 +15,9 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 app.on('ready', () => {
-    win = new BrowserWindow({})
+    win = new BrowserWindow({
+    }
+    )
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'views/index.html'),
         protocol: 'file:',
@@ -56,7 +58,7 @@ function createNewCertificate() {
     
     NewCertificate.setMenu(null);
     NewCertificate.loadURL(url.format({
-        pathname: path.join(__dirname, 'views/certificado.html'), //aqui es donde estoy renderizando el new product.html
+        pathname: path.join(__dirname, 'views/ordentrabajo.html'), //aqui es donde estoy renderizando el new product.html
         protocol: 'file:',
         slashes: true}))
 }
